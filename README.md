@@ -25,7 +25,7 @@ Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for
 2. Navigate to file and open 1 of 4 versions Surgical_Challenge.usd
 You should see the following scene in the view monitor
 
-![Image]()
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/viewport.png)
 
 3. Start roscore in a seperate terminal
 4. Navigate to preferred ROS operated controller
