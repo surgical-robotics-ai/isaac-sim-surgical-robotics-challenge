@@ -2,6 +2,9 @@
 Isaac Sim implementation of the AMBF Surgical Robotics Challenge developed by Johns Hopkins LCSR Lab.
 This implementation has been developed and tested on Ubuntu 20.04
 
+See: https://github.com/surgical-robotics-ai/surgical_robotics_challenge
+To find the work that this project is based on. 
+
 ## 1. Install AMBF, ROS1 Noetic, and Isaac Sim
 Ensure that the correct version of ROS is installed and sourced on your system. ROS1 Noetic can be found here: 
 http://wiki.ros.org/noetic/Installation/Ubuntu
