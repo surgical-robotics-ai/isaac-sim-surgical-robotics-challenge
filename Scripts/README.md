@@ -3,7 +3,7 @@ The scripts listed and used in this project are based off the AMBF Surgical Chal
 
 ## Controlling Simulated Robots:
 Before launching Isaac Sim, ensure to activate the ROS1 bridge for your version. 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/viewport.png)
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/startisaac.png)
 Start roscore in another terminal or command-line before starting the simulation in the Surgical_Challenge.usd files. Roscore must be activated before starting the simulation and the Isaac Sim simulation must be running before running any teleoperation script. Using rostopics, Isaac Sim will read and send the PSM joint states in the dVRK-CRTK rostopic format.
 
 ## Isaac Sim Scripts
