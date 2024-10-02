@@ -127,6 +127,9 @@ class PSM(BaseObject):
         if joint_name_or_idx == 7:
             # Grippers in Isaac Sim Goes Opposite Way
             mag_p = -p
+        if joint_name_or_idx == 5:
+            # Reverse Tool Yaw Joint
+            mag_p = -p
         if joint_name_or_idx == 3:
             # Yaw Rotations
             mag_p = self.getShortestAngle(joint_name_or_idx, p)
