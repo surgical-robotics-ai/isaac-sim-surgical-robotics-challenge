@@ -1,0 +1,36 @@
+{
+    "ROS1CustomJointsPython": {
+        "version": 1,
+        "description": "ROS1 Custom Joints Python",
+        "language": "Python",
+        "metadata": {
+            "uiName": "ROS1CustomJointsPython"
+        },
+        "inputs": {
+            "execIn": {
+                "type": "execution",
+                "description": "execution input",
+                "default": 0,
+                "metadata": {
+                    "uiName": "Exec In"
+                }
+            },
+            "topicName": {
+                "type": "string",
+                "description": "topic name",
+                "metadata": {
+                    "uiName": "topic name"
+                },
+                "default": "topicName"
+            },
+            "joint": {
+                "type": "float",
+                "description": "joint value",
+                "default": 0,
+                "metadata": {
+                    "uiName": "joint value"
+                }
+            }
+        }
+    }
+}

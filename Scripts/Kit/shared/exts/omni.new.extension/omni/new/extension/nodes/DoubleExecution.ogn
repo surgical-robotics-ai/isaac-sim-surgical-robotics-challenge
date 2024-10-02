@@ -1,0 +1,38 @@
+{
+    "DoubleExecution": {
+        "version": 1,
+        "description": "Output execution for two different input execution nodes",
+        "language": "Python",
+        "metadata": {
+            "uiName": "doubleExec"
+        },
+        "inputs": {
+            "execIn1": {
+                "type": "execution",
+                "description": "execution input 1",
+                "default": 0,
+                "metadata": {
+                    "uiName": "execIn1"
+                }
+            },
+            "execIn2": {
+                "type": "execution",
+                "description": "execution input 2",
+                "default": 0,
+                "metadata": {
+                    "uiName": "execIn2"
+                }
+            }
+        },
+        "outputs": {
+            "execOut": {
+                "type": "execution",
+                "description": "output execution",
+                "metadata": {
+                    "uiName": "execOut"
+                },
+                "default": 0
+            }
+        }
+    }
+}

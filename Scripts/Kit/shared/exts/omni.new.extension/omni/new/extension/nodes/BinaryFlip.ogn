@@ -1,0 +1,38 @@
+{
+    "BinaryFlip": {
+        "version": 1,
+        "description": "Binary Flip with input",
+        "language": "Python",
+        "metadata": {
+            "uiName": "BinaryFlip"
+        },
+        "inputs": {
+            "execIn": {
+                "type": "execution",
+                "description": "execution in",
+                "default": 0,
+                "metadata": {
+                    "uiName": "execIn"
+                }
+            },
+            "Condition": {
+                "type": "bool",
+                "description": "current condition",
+                "default": false,
+                "metadata": {
+                    "uiName": "Condition"
+                }
+            }
+        },
+        "outputs": {
+            "Condition": {
+                "type": "bool",
+                "description": "output condition",
+                "default": false,
+                "metadata": {
+                    "uiName": "Condition"
+                }
+            }
+        }
+    }
+}

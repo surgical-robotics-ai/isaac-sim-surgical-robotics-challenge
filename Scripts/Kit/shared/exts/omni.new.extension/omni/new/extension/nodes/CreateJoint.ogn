@@ -1,0 +1,51 @@
+{
+    "CreateJoint": {
+        "version": 1,
+        "description": "Creates a D6 joint dynamically while simulation is running",
+        "language": "Python",
+        "metadata": {
+            "uiName": "CreateJoint"
+        },
+        "inputs": {
+            "ExecIn": {
+                "type": "execution",
+                "description": "Execution Input",
+                "default": 0,
+                "metadata": {
+                    "uiName": "execIn"
+                }
+            },
+            "Body1": {
+                "type": "string",
+                "description": "First body with joint",
+                "default": "",
+                "metadata": {
+                    "uiName": "body 1"
+                }
+            },
+            "Body2": {
+                "type": "string",
+                "description": "Second body with joint",
+                "default": ""
+            }
+        },
+        "outputs": {
+            "ExecOut": {
+                "type": "execution",
+                "description": "Execution Out",
+                "metadata": {
+                    "uiName": "execOut"
+                },
+                "default": 0
+            },
+            "NewJoint": {
+                "type": "string",
+                "description": "New joint created between bodies",
+                "metadata": {
+                    "uiName": "newJoint"
+                },
+                "default": ""
+            }
+        }
+    }
+}

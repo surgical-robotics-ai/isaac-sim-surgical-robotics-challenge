@@ -1,0 +1,36 @@
+{
+    "ROS1CustomPythonNode": {
+        "version": 1,
+        "description": "ROS1 Custom Python Node",
+        "language": "Python",
+        "metadata": {
+            "uiName": "ROS1 Custom Python Node"
+        },
+        "inputs": {
+            "execIn": {
+                "type": "execution",
+                "description": "execution input",
+                "metadata": {
+                    "uiName": "Exec In"
+                },
+                "default": 0
+            },
+            "topicName": {
+                "type": "string",
+                "description": "topic name",
+                "metadata": {
+                    "uiName": "Topic Name"
+                },
+                "default": "test"
+            },
+            "data": {
+                "type": "float[]",
+                "description": "rostopic data",
+                "default": [],
+                "metadata": {
+                    "uiName": "data"
+                }
+            }
+        }
+    }
+}

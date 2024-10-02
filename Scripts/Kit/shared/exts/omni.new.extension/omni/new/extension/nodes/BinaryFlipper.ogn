@@ -1,0 +1,30 @@
+{
+    "BinaryFlipper": {
+        "version": 1,
+        "description": "Every execution pulse flips internal condition to true or false",
+        "language": "Python",
+        "metadata": {
+            "uiName": "BinaryFlip"
+        },
+        "inputs": {
+            "execIn": {
+                "type": "execution",
+                "description": "input execution",
+                "default": 0,
+                "metadata": {
+                    "uiName": "execIn"
+                }
+            }
+        },
+        "outputs": {
+            "Condition": {
+                "type": "bool",
+                "description": "Internal condition state",
+                "default": false,
+                "metadata": {
+                    "uiName": "Condition"
+                }
+            }
+        }
+    }
+}
