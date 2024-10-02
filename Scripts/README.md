@@ -7,6 +7,13 @@ Before launching Isaac Sim, ensure to activate the ROS1 bridge for your version.
 
 Start roscore in another terminal or command-line before starting the simulation in the Surgical_Challenge.usd files. Roscore must be activated before starting the simulation and the Isaac Sim simulation must be running before running any teleoperation script. Using rostopics, Isaac Sim will read and send the PSM joint states in the dVRK-CRTK rostopic format.
 
+## Isaac Sim Omnigraph Custom Nodes
+Isaac Sim allows users to create custom interactive scripts with their Action Graph / Omnigraph. This feature is currently only present in version 2023.1, but nodes created this way does work for later versions.
+
+To enable the custom Omnigraph nodes, download the Kit folder listed in scripts and add it to your Documents folder. In Isaac Sim, enable the custom extensions and autoload to use the custom nodes for the Surgica Challenge files.
+
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/custom_nodes.png)
+
 ## Isaac Sim Scripts
 Several key files added or modified from the AMBF Surgical Challenge:
 
