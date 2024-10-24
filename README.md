@@ -21,7 +21,7 @@ For additional resources, see Documents for summarized installation steps and no
 Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for use
 
 ## 3. Running Simulation
-1. After installation of all prerequisite programs, open Isaac Sim version 4.1.0
+1. After installation of all prerequisite programs, open Isaac Sim version 4.2.0
 2. Navigate to file and open 1 of 4 versions Surgical_Challenge.usd
 You should see the following scene in the view monitor
 
