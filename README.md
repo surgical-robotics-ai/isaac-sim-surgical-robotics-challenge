@@ -41,7 +41,13 @@ cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/tel
 python3 [controller].py -c isaac_sim --three false
 ~~~
 
-## 4. Input Devices
+## 4. Choosing Thread Type
+From Isaac Sim 4.0.0 and on, you are able to activate and deactivate different assets within the scene. To activate another thread in the scene, see below:
+1. Rigid Body Thread: Set Physic Scene step to 300, Activate "Needle_Thread" and deactivate others.
+2. Deformable Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Deformable" and deactivate others.
+3. Particle Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Particle" and deactivate others.
+
+## 5. Input Devices
 Repositories for other control devices can be found in the links below for MTM and Phantom Omni
 
 **Master Tool Manipulator (MTM)**
