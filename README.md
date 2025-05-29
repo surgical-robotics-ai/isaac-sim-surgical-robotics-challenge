@@ -56,3 +56,5 @@ a. https://github.com/jhu-dvrk/dvrk-ros
 **Phantom Omni**
 b. https://github.com/WPI-AIM/ros_geomagic
 
+## 6. Example
+![Video](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/ISMR25_0023_VD_i.mp4)
