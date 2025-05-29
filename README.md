@@ -21,8 +21,8 @@ For additional resources, see Documents for summarized installation steps and no
 Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for use
 
 ## 3. Running Simulation
-1. After installation of all prerequisite programs, open Isaac Sim version 4.2.0
-2. Navigate to file and open 1 of 4 versions Surgical_Challenge.usd
+1. After installation of all prerequisite programs, open Isaac Sim version 4.5.0
+2. Navigate to file and open either version of the Surgical_Challenge.usd (Surgical_Robotics_Challenge_New or Surgical_Robotics_Challenge_Old)
 You should see the following scene in the view monitor
 
 ![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/viewport.png)
@@ -43,9 +43,9 @@ python3 [controller].py -c isaac_sim --three false
 
 ## 4. Choosing Thread Type
 From Isaac Sim 4.0.0 and on, you are able to activate and deactivate different assets within the scene. To activate another thread in the scene, see below:
-1. Rigid Body Thread: Set Physic Scene step to 300, Activate "Needle_Thread" and deactivate others.
-2. Deformable Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Deformable" and deactivate others.
-3. Particle Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Particle" and deactivate others.
+1. Rigid Body Thread: Set Physic Scene step to 300, Activate "Needle_Thread" and deactivate others. Turn OFF GPU in physics scene.
+2. Deformable Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Deformable" and deactivate others. Turn ON GPU in physics scene.
+3. Particle Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Particle" and deactivate others. Turn ON GPU in physics scene.
 
 ## 5. Input Devices
 Repositories for other control devices can be found in the links below for MTM and Phantom Omni
