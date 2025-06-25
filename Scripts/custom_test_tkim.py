@@ -14,6 +14,10 @@ from isaacsim.core.utils.stage import add_reference_to_stage, get_stage_units, p
 from isaacsim.core.utils.viewports import set_camera_view
 from isaacsim.storage.native import get_assets_root_path
 from isaacsim.core.utils.extensions import enable_extension
+<<<<<<< dev
+from isaacsim.core.simulation_manager import SimulationManager
+=======
+>>>>>>> main
 from argparse import ArgumentParser
 
 # enable ROS bridge extension
@@ -36,6 +40,8 @@ if not rosgraph.is_master_online():
 import rospy
 from nav_msgs.msg import Odometry
 
+<<<<<<< dev
+=======
 """
 # preparing the scene
 assets_root_path = get_assets_root_path()
@@ -61,12 +67,18 @@ timeline = omni.timeline.get_timeline_interface()
 world.reset()
 """
 
+>>>>>>> main
 class SubscribeCamera:
     def __init__(self, world):
         # setup the ros subscriber here
         self.ros_sub = rospy.Subscriber("/CameraFramePublisher", Odometry, self.update_camera_callback, queue_size=10)
+<<<<<<< dev
+        self.camera_position = Gf.Vec3d(0.0, 0.0, 0.0) # Starting Position
+        self.camera_orientation = Gf.Quatd(1.0, 0.0, 0.0, 0.0) # Starting Orientation
+=======
         self.camera_position = Gf.Vec3d(0.03954, 0.28756, 0.84831) # Starting Position
         self.camera_orientation = Gf.Quatd(0.05009, 0.01638, 0.31033, 0.94917) # Starting Orientation
+>>>>>>> main
         self.ros_world = world
 
     def update_camera_callback(self, data):
@@ -100,6 +112,13 @@ if __name__ == "__main__":
         eye=[5.0, 0.0, 1.5], target=[0.00, 0.00, 1.00], camera_prim_path="/OmniverseKit_Persp"
     )  # set camera view
 
+<<<<<<< dev
+    # Enable GPU dynamics with Isaac Sim Simulation Manager
+    simulation_manager = SimulationManager()
+    simulation_manager.enable_gpu_dynamics(True)
+
+=======
+>>>>>>> main
     # Add Isaac Sim Surgical Challenge Reference
     #asset_path = "/home/armone/Desktop/Isaac-Sim-Surgical-Robotics-Challenge-main/Assets/Surgical_Challenge_Old_Phantom.usd"
     add_reference_to_stage(usd_path=asset_path, prim_path="/World/Test")  # add robot to stage
@@ -111,8 +130,13 @@ if __name__ == "__main__":
     world.reset()
 
     rospy.init_node("Standalone", anonymous=True, disable_signals=True, log_level=rospy.ERROR)
+<<<<<<< dev
+    timeline.play()
+    ECM = SubscribeCamera(world)
+=======
     ECM = SubscribeCamera(world)
     timeline.play()
+>>>>>>> main
     reset_needed = False
     
     # Get Isaac Sim Camera Prim
