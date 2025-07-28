@@ -2,30 +2,25 @@
 # /*
 #     \author    <tkim104@jhu.edu>
 #     \author    Tae Wan Kim
-#     \version   0.0.1
+#     \version   0.1.0
 # */
 # //==============================================================================
 
-import rospy
-from std_msgs.msg import Empty
+# ROS version
+import os
+from .ros_abstraction_layer import ral
+
 import threading
+
+from std_msgs.msg import Empty
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState
+
 from .isaac_sim_objects.isaac_sim_camera import Camera
 from .isaac_sim_objects.isaac_sim_psm import PSM
+from .isaac_sim_objects.isaac_sim_base_object import BaseObject
 
-"""
-# IsaacClient
-# IsaacClient is a script modeled off of ambf_client.py to act as a intermediary between external
-# controllers and Isaac Sim, utilizing rostopics to control different poses and actions of objects
-# within the simulator
-# Like the AMBF version, it creates wrapper objects around rostopics for the user to comminucate with
-# to control models within the simulator
-
-# Version 0.0.1
-Currently supports communication with Isaac Sim Camera and PSM Object
-"""
-class IsaacClient:
+class IsaacClientROS2:
     def __init__(self, client_name='isaac_client'):
         self._ros_topics = []
         self._sub_list = []
@@ -37,54 +32,68 @@ class IsaacClient:
         self._client_name = client_name
         self._world_handle = None
         self._rate = None
-        pass
+        self.ral = None
 
     def set_publish_rate(self, rate):
-        self._rate = rospy.Rate(rate)
+        self._rate = self.ral.create_rate(rate)
 
     def create_objs_from_rostopics(self, publish_rate):
         # Check if a node is running, if not create one
         # else get the name of the node
-        if "/unnamed" == rospy.get_name():
-            rospy.init_node(self._client_name)
-        else:
-            self._client_name = rospy.get_name()
+        self.ral = ral(self._client_name)
+        self._ros_topics = self.ral.get_published_topics()
         self.set_publish_rate(publish_rate)
-        rospy.on_shutdown(self.clean_up)
-        self._ros_topics = rospy.get_published_topics()
 
         # Create Objects for the Isaac Sim Rostopics
         for i in range(len(self._ros_topics)):
             topic_name = self._ros_topics[i][0]
             msg_type = self._ros_topics[i][1]
             if topic_name == '/CameraFrame':
-                base_obj = Camera(topic_name)
+                base_obj = Camera(ral = self.ral, a_name = topic_name)
                 base_obj._state = Odometry()
                 base_obj._cmd = Odometry()
-                base_obj._sub = rospy.Subscriber(topic_name, Odometry, base_obj.ros_cb)
-                base_obj._pub = rospy.Publisher(name='/CameraFramePublisher', data_class=Odometry,
+                base_obj._sub = self.ral.subscriber(topic_name, Odometry, base_obj.ros_cb)
+                base_obj._pub = self.ral.publisher(topic='/CameraFramePublisher', msg_type=Odometry,
                                                 tcp_nodelay=True, queue_size=10)
                 self._objects_dict[base_obj.get_name()] = base_obj
             if topic_name == '/psm1/baselink':
-                base_obj = PSM(topic_name)
+                base_obj = PSM(ral = self.ral, a_name = topic_name)
                 base_obj._state = Odometry()
                 base_obj._joints = JointState()
                 base_obj._cmd = JointState()
-                base_obj._subj = rospy.Subscriber('/PSM1/measured_js', JointState, base_obj.ros_j_cb)
-                base_obj._sub = rospy.Subscriber('/psm1/baselink', Odometry, base_obj.ros_cb)
-                base_obj._pub = rospy.Publisher(name='/PSM1/move_jp', data_class=JointState, 
+                base_obj._subj = self.ral.subscriber('/PSM1/measured_js', JointState, base_obj.ros_j_cb)
+                base_obj._sub = self.ral.subscriber('/psm1/baselink', Odometry, base_obj.ros_cb)
+                base_obj._pub = self.ral.publisher(topic='/PSM1/move_jp', msg_type=JointState, 
+                                                tcp_nodelay=True, queue_size=10)
+                self._objects_dict[base_obj.get_name()] = base_obj
+            if topic_name == '/psm1/tool_id/id420006':
+                base_obj = BaseObject(ral = self.ral, a_name = topic_name, time_out=0.1)
+                base_obj._state = Empty()
+                base_obj._cmd = Empty()
+                base_obj._sub = self.ral.subscriber('/psm1/tool_id/id420006', Empty, base_obj.ros_cb)
+                base_obj._pub = self.ral.publisher(topic='/psm1/tool_id/id420006', msg_type=Empty, 
+                                                tcp_nodelay=True, queue_size=10)
+                self._objects_dict[base_obj.get_name()] = base_obj
+            if topic_name == '/psm2/tool_id/id420006':
+                base_obj = BaseObject(ral = self.ral, a_name = topic_name, time_out=0.1)
+                base_obj._state = Empty()
+                base_obj._cmd = Empty()
+                base_obj._sub = self.ral.subscriber('/psm2/tool_id/id420006', Empty, base_obj.ros_cb)
+                base_obj._pub = self.ral.publisher(topic='/psm2/tool_id/id420006', msg_type=Empty, 
                                                 tcp_nodelay=True, queue_size=10)
                 self._objects_dict[base_obj.get_name()] = base_obj
             if topic_name == '/psm2/baselink':
-                base_obj = PSM(topic_name)
+                base_obj = PSM(ral = self.ral, a_name = topic_name)
                 base_obj._state = Odometry()
                 base_obj._joints = JointState()
                 base_obj._cmd = JointState()
-                base_obj._subj = rospy.Subscriber('/PSM2/measured_js', JointState, base_obj.ros_j_cb)
-                base_obj._sub = rospy.Subscriber('/psm2/baselink', Odometry, base_obj.ros_cb)
-                base_obj._pub = rospy.Publisher(name='/PSM2/move_jp', data_class=JointState, 
+                base_obj._subj = self.ral.subscriber('/PSM2/measured_js', JointState, base_obj.ros_j_cb)
+                base_obj._sub = self.ral.subscriber('/psm2/baselink', Odometry, base_obj.ros_cb)
+                base_obj._pub = self.ral.publisher(topic='/PSM2/move_jp', msg_type=JointState, 
                                                 tcp_nodelay=True, queue_size=10)
                 self._objects_dict[base_obj.get_name()] = base_obj
+                
+        self.ral.spin()
 
     def connect(self, default_publish_rate=120):
         self.create_objs_from_rostopics(default_publish_rate)
@@ -156,8 +165,20 @@ class IsaacClient:
         self._pub_thread.daemon = True
         self._pub_thread.start()
 
+    def is_shutdown(self):
+        return self.ral.is_shutdown()
+    
+    def get_time(self):
+        return self.ral.to_sec(self.ral.now())
+
+    def create_rate(self, rate):
+        return self.ral.create_rate(rate)
+
+    def get_ral(self):
+        return self.ral
+
     def _run_obj_publishers(self):
-        while not rospy.is_shutdown():
+        while not self.is_shutdown():
             for key, obj in self._objects_dict.items():
                 if obj.is_active():
                     obj.run_publisher()

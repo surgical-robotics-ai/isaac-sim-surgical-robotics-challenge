@@ -1,12 +1,5 @@
-from ambf_client import Client
-from .isaac_client import IsaacClient
+from .isaac_client_ros2 import IsaacClientROS2
 import surgical_robotics_challenge.units_conversion as units_conversion
-import rospy
-from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Pose
-import numpy as np
-import math
-from PyKDL import Vector, Rotation, Frame
 
 class SimulationObject:
     def __init__(self, ambf_object):
@@ -24,6 +17,9 @@ class SimulationObject:
 
     def get_pose(self):
         return units_conversion.get_pose(self._object)
+    
+    def get_ros_name(self)->str:
+        return self._object._name
 
     def set_pos(self, pos):
         units_conversion.set_pos(self._object, pos)
@@ -65,13 +61,17 @@ class SimulationManager:
     def __init__(self, name):
         self._client = None
         if name == "isaac_sim":
-            self._client = IsaacClient(name)
+            self._client = IsaacClientROS2(name)
         else:
-            self._client = Client(name)
+            raise RuntimeError(f"Client Name Required")
         self._client.connect()
 
-    def get_obj_handle(self, name):
+    def get_obj_handle(self, name, required: bool= False)->SimulationObject:
         object = self._client.get_obj_handle(name)
+        
+        if required and object is None:
+            raise RuntimeError(f"SimulationObject {name} is required but not found in the simulation")
+        
         if object:
             return SimulationObject(object)
         else:
@@ -79,6 +79,18 @@ class SimulationManager:
 
     def get_world_handle(self):
         return self._client.get_world_handle()
+        
+    def is_shutdown(self):
+        return self._client.is_shutdown()
+
+    def get_time(self):
+        return self._client.get_time()
+
+    def create_rate(self, rate):
+        return self._client.create_rate(rate)
+
+    def get_ral(self):
+        return self._client.ral
 
 """
 class IsaacObject:

@@ -40,7 +40,7 @@
 #     \version   1.0
 # */
 # //==============================================================================
-import rospy
+from ros_abstraction_layer import ral
 import psm_arm
 import ecm_arm
 import scene
@@ -63,44 +63,45 @@ class Options:
     run_scene = True
     namespace = '/CRTK'
     rate = 120
-    tool_id = 400006
 
 
 class PSMCRTKWrapper:
-    def __init__(self, client, name, namespace, tool_id):
+    def __init__(self, simulation_manager, name, namespace):
         self.arm_name = name
         self.namespace = namespace
-        self.arm = psm_arm.PSM(client, name, add_joint_errors=True, tool_id=tool_id)
+        self.simulation_manager = simulation_manager
+        self.arm = psm_arm.PSM(simulation_manager, name, add_joint_errors=True)
         time.sleep(0.1)
 
-        self.measured_js_pub = rospy.Publisher(namespace + '/' + name + '/' + 'measured_js', JointState,
+        ral = self.simulation_manager.get_ral()
+        self.measured_js_pub = ral.publisher(namespace + '/' + name + '/' + 'measured_js', JointState,
                                                queue_size=1)
 
-        self.measured_cp_pub = rospy.Publisher(namespace + '/' + name + '/' + 'measured_cp', PoseStamped,
+        self.measured_cp_pub = ral.publisher(namespace + '/' + name + '/' + 'measured_cp', PoseStamped,
                                                queue_size=1)
 
-        self.T_b_w_pub = rospy.Publisher(namespace + '/' + name + '/' + 'T_b_w', PoseStamped,
+        self.T_b_w_pub = ral.publisher(namespace + '/' + name + '/' + 'T_b_w', PoseStamped,
                                          queue_size=1)
 
-        self.measured_cv_pub = rospy.Publisher(namespace + '/' + name + '/' + 'measured_cv', TwistStamped,
+        self.measured_cv_pub = ral.publisher(namespace + '/' + name + '/' + 'measured_cv', TwistStamped,
                                                queue_size=1)
 
-        self.servo_jp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_jp', JointState,
+        self.servo_jp_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_jp', JointState,
                                              self.servo_jp_cb, queue_size=1)
 
-        self.servo_jp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'move_jp', JointState,
+        self.servo_jp_sub = ral.subscriber(namespace + '/' + name + '/' + 'move_jp', JointState,
                                              self.move_jp_cb, queue_size=1)
 
-        self.servo_jv_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_jv', JointState,
+        self.servo_jv_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_jv', JointState,
                                              self.servo_jv_cb, queue_size=1)
 
-        self.servo_cp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_cp', PoseStamped,
+        self.servo_cp_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_cp', PoseStamped,
                                              self.servo_cp_cb, queue_size=1)
 
-        self.servo_cp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'move_cp', PoseStamped,
+        self.servo_cp_sub = ral.subscriber(namespace + '/' + name + '/' + 'move_cp', PoseStamped,
                                              self.move_cp_cb, queue_size=1)
 
-        self.servo_jaw_jp_sub = rospy.Subscriber(namespace + '/' + name + '/jaw/' + 'servo_jp', JointState,
+        self.servo_jaw_jp_sub = ral.subscriber(namespace + '/' + name + '/jaw/' + 'servo_jp', JointState,
                                                  self.servo_jaw_jp_cb, queue_size=1)
 
         self._measured_js_msg = JointState()
@@ -136,18 +137,18 @@ class PSMCRTKWrapper:
         self.arm.run_grasp_logic(self._jaw_angle)
 
     def publish_js(self):
-        self._measured_js_msg.header.stamp = rospy.Time.now()
+        self._measured_js_msg.header.stamp = self.simulation_manager.get_time()
         self._measured_js_msg.position = self.arm.measured_jp()
         self._measured_js_msg.velocity = self.arm.measured_jv()
         self.measured_js_pub.publish(self._measured_js_msg)
 
     def publish_cs(self):
-        self._measured_cp_msg.header.stamp = rospy.Time.now()
+        self._measured_cp_msg.header.stamp = self.simulation_manager.get_time()
         self._measured_cp_msg.pose = np_mat_to_pose(self.arm.measured_cp())
         self.measured_cp_pub.publish(self._measured_cp_msg)
 
     def publish_T_b_w(self):
-        self._T_b_w_msg.header.stamp = rospy.Time.now()
+        self._T_b_w_msg.header.stamp = self.simulation_manager.get_time()
         self._T_b_w_msg.pose = np_mat_to_pose(self.arm.get_T_b_w())
         self.T_b_w_pub.publish(self._T_b_w_msg)
 
@@ -158,26 +159,28 @@ class PSMCRTKWrapper:
 
 
 class ECMCRTKWrapper:
-    def __init__(self, client, name, namespace):
+    def __init__(self, simulation_manager, name, namespace):
         self.arm_name = name
         self.namespace = namespace
-        self.arm = ecm_arm.ECM(client, 'CameraFrame')
+        self.simulation_manager = simulation_manager
+        self.arm = ecm_arm.ECM(simulation_manager, 'CameraFrame')
         self._servo_jp_cmd = [0.0, 0.0, 0.0, 0.0]
         time.sleep(0.1)
 
-        self.measured_js_pub = rospy.Publisher(namespace + '/' + name + '/' + 'measured_js', JointState,
+        ral = self.simulation_manager.get_ral()
+        self.measured_js_pub = ral.publisher(namespace + '/' + name + '/' + 'measured_js', JointState,
                                                queue_size=1)
 
-        self.measured_cp_pub = rospy.Publisher(namespace + '/' + name + '/' + 'measured_cp', PoseStamped,
+        self.measured_cp_pub = ral.publisher(namespace + '/' + name + '/' + 'measured_cp', PoseStamped,
                                                queue_size=1)
 
-        self.servo_jp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_jp', JointState,
+        self.servo_jp_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_jp', JointState,
                                              self.servo_jp_cb, queue_size=1)
 
-        # self.servo_jv_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_jv', JointState,
+        # self.servo_jv_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_jv', JointState,
         #                                      self.servo_jv_cb, queue_size=1)
 
-        # self.servo_cp_sub = rospy.Subscriber(namespace + '/' + name + '/' + 'servo_cp', PoseStamped,
+        # self.servo_cp_sub = ral.subscriber(namespace + '/' + name + '/' + 'servo_cp', PoseStamped,
         #                                      self.servo_cp_cb, queue_size=1)
 
         self._measured_js_msg = JointState()
@@ -201,12 +204,12 @@ class ECMCRTKWrapper:
     #     self.arm.servo_jv(js.velocity)
 
     def publish_js(self):
-        self._measured_js_msg.header.stamp = rospy.Time.now()
+        self._measured_js_msg.header.stamp = self.simulation_manager.get_time()
         self._measured_js_msg.position = self.arm.measured_jp()
         self.measured_js_pub.publish(self._measured_js_msg)
 
     def publish_cs(self):
-        self._measured_cp_msg.header.stamp = rospy.Time.now()
+        self._measured_cp_msg.header.stamp = self.simulation_manager.get_time()
         self._measured_cp_msg.pose = np_mat_to_pose(self.arm.measured_cp())
         self.measured_cp_pub.publish(self._measured_cp_msg)
 
@@ -230,6 +233,7 @@ class SceneObjectType(Enum):
 class SceneCRTKWrapper:
     def __init__(self, simulation_manager, namespace):
         self.namespace = namespace
+        self.simulation_manager = simulation_manager
         self.scene = scene.Scene(simulation_manager)
         self._scene_object_pubs = dict()
         self._scene_object_pubs[SceneObjectType.Needle] = [None, self.scene.needle_measured_cp, PoseStamped()]
@@ -244,12 +248,12 @@ class SceneCRTKWrapper:
 
         suffix = '/measured_cp'
         for k, i in self._scene_object_pubs.items():
-            i[0] = rospy.Publisher(namespace + '/' + k.name + suffix, PoseStamped, queue_size=1)
+            i[0] = self.simulation_manager.get_ral().publisher(namespace + '/' + k.name + suffix, PoseStamped, queue_size=1)
             i[2].header.frame_id = 'world'
 
     def publish_cs(self):
         for k, i in self._scene_object_pubs.items():
-            i[2].header.stamp = rospy.Time.now()
+            i[2].header.stamp = self.simulation_manager.get_time()
             i[2].pose = np_mat_to_pose(i[1]())
             i[0].publish(i[2])
 
@@ -264,15 +268,15 @@ class SceneManager:
         self._components = []
         if options.run_psm_one is True:
             print("Launching CRTK-ROS Interface for PSM1 ")
-            self.psm1 = PSMCRTKWrapper(self.simulation_manager, 'psm1', options.namespace, options.tool_id)
+            self.psm1 = PSMCRTKWrapper(self.simulation_manager, 'psm1', options.namespace)
             self._components.append(self.psm1)
         if options.run_psm_two is True:
             print("Launching CRTK-ROS Interface for PSM2 ")
-            self.psm2 = PSMCRTKWrapper(self.simulation_manager, 'psm2', options.namespace, options.tool_id)
+            self.psm2 = PSMCRTKWrapper(self.simulation_manager, 'psm2', options.namespace)
             self._components.append(self.psm2)
         if options.run_psm_three is True:
             print("Launching CRTK-ROS Interface for PSM3 ")
-            self.psm3 = PSMCRTKWrapper(self.simulation_manager, 'psm3', options.namespace, options.tool_id)
+            self.psm3 = PSMCRTKWrapper(self.simulation_manager, 'psm3', options.namespace)
             self._components.append(self.psm3)
         if options.run_ecm:
             print("Launching CRTK-ROS Interface for ECM ")
@@ -283,12 +287,12 @@ class SceneManager:
             self.scene = SceneCRTKWrapper(self.simulation_manager, options.namespace)
             self._components.append(self.scene)
 
-        self._task_3_init_sub = rospy.Subscriber('/CRTK/scene/task_3_setup/init',
+        self._task_3_init_sub = self.simulation_manager.get_ral().subscriber('/CRTK/scene/task_3_setup/init',
                                                 Empty, self.task_3_setup_cb, queue_size=1)
 
-        self._task_3_setup_reaady_pub = rospy.Publisher('/CRTK/scene/task_3_setup/ready', Empty, queue_size=1)
+        self._task_3_setup_reaady_pub = self.simulation_manager.get_ral().publisher('/CRTK/scene/task_3_setup/ready', Empty, queue_size=1)
 
-        self._rate = rospy.Rate(options.rate)
+        self._rate = self.simulation_manager.create_rate(options.rate)
 
     def task_3_setup_cb(self, msg):
         print("CRTK-ROS Based: Task 3 Setup Called")
@@ -296,10 +300,15 @@ class SceneManager:
         self._task_3_setup_reaady_pub.publish(Empty())
 
     def run(self):
-        while not rospy.is_shutdown():
-            for comp in self._components:
-                comp.run()
-            self._rate.sleep()
+        while not self.simulation_manager.is_shutdown():
+            try:
+                for comp in self._components:
+                    comp.run()
+                self._rate.sleep()
+            except Exception as e:
+                print(e)
+                print('Goodbye')
+                break
 
 
 if __name__ == "__main__":
@@ -311,7 +320,6 @@ if __name__ == "__main__":
     parser.add_argument('--scene', action='store', dest='run_scene', help='RUN Scene', default=True)
     parser.add_argument('--ns', action='store', dest='namespace', help='Namespace', default='/CRTK')
     parser.add_argument('--rate', action='store', dest='rate', help='Rate of Publishing', default=120)
-    parser.add_argument('--tool_id', action='store', dest='psm_tool_id', help='PSM Tool IDS', default=400006)
 
     parsed_args = parser.parse_args()
     print('Specified Arguments')
@@ -326,7 +334,7 @@ if __name__ == "__main__":
 
     options.namespace = parsed_args.namespace
     options.rate = parsed_args.rate
-    options.tool_id = parsed_args.psm_tool_id
 
     sceneManager = SceneManager(options)
+    time.sleep(2.0)
     sceneManager.run()

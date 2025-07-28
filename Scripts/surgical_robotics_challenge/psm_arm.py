@@ -46,11 +46,10 @@
 from surgical_robotics_challenge.kinematics.psmKinematics import *
 from surgical_robotics_challenge.utils.joint_errors_model import JointErrorsModel
 from surgical_robotics_challenge.utils import coordinate_frames
-import rospy
 import time
 from threading import Thread, Lock
 from surgical_robotics_challenge.utils.interpolation import Interpolation
-
+from surgical_robotics_challenge.simulation_manager import SimulationManager, SimulationObject
 
 class PSMJointMapping:
     def __init__(self):
@@ -73,23 +72,36 @@ pjm = PSMJointMapping()
 
 
 class PSM:
-    def __init__(self, simulation_manager, name, add_joint_errors=False, tool_id=PSMType.Default):
+    def __init__(self, simulation_manager:SimulationManager, name, add_joint_errors=False, detect_tool_id=True, tool_id=420006):
         self.simulation_manager = simulation_manager
         self.name = name
-        assert tool_id is not None, 'Please specify a tool id'
-        self.tool_id = int(tool_id)
-        self.base = self.simulation_manager.get_obj_handle(name + '/baselink')
+        self.base = self.simulation_manager.get_obj_handle(self.name + '/baselink', required=True) 
+        self.tool_id_body = self.simulation_manager.get_obj_handle(name + '/tool_id', required=True)
+
+        if detect_tool_id:
+            self.tool_id = self.get_tool_id()
+            tool_id = self.tool_id
+        else:
+            self.tool_id = tool_id
+
+        self.tool_id = int(self.tool_id)
+        self.validate_tool_id()
+
         self.base.set_joint_types([JointType.REVOLUTE, JointType.REVOLUTE, JointType.PRISMATIC, JointType.REVOLUTE,
                                    JointType.REVOLUTE, JointType.REVOLUTE, JointType.REVOLUTE, JointType.REVOLUTE])
         self.target_IK = self.simulation_manager.get_obj_handle(name + '_target_ik')
         self.palm_joint_IK = self.simulation_manager.get_obj_handle(name + '_palm_joint_ik')
         self.target_FK = self.simulation_manager.get_obj_handle(name + '_target_fk')
-        self.sensor = self.simulation_manager._client.get_obj_handle(name + '/Sensor0')
+
+        self.left_finger_ghost = self.simulation_manager._client.get_obj_handle(name + '/left_finger_ghost')
+        self.right_finger_ghost = self.simulation_manager._client.get_obj_handle(name + '/right_finger_ghost')
         self.actuators = []
         self.actuators.append(self.simulation_manager._client.get_obj_handle(name + '/Actuator0'))
         time.sleep(0.5)
         self.grasped = [False, False, False]
         self.graspable_objs_prefix = ["Needle", "Thread", "Puzzle"]
+        self.grasped_obj_name = None
+        self.grasp_actuation_jaw_angle = 0.05
         self.T_t_b_home = coordinate_frames.PSM.T_t_b_home
         self._kd = PSMKinematicSolver(psm_type=self.tool_id, tool_id=self.tool_id)
 
@@ -97,7 +109,6 @@ class PSM:
         self._T_b_w = None
         # Transform of World in Base
         self._T_w_b = None
-        self._base_pose_updated = False
         self._num_joints = 6
         self._ik_solution = np.zeros([self._num_joints])
         self._last_jp = np.zeros([self._num_joints])
@@ -115,6 +126,30 @@ class PSM:
 
         # Initialize Jaw Angle
         self.set_jaw_angle(0.5)
+
+    def get_rostopic_name(self):
+        return self.base.get_ros_name()
+    
+    def get_tool_id(self) -> int:
+        # Assuming the rostopic name is in the format /psm1/tool_id/id420006
+        rostopic_name = self.tool_id_body.get_ros_name()
+        try: 
+            id_number = rostopic_name.split('/')[-1]
+            print(id_number[2:])
+            tool_id = int(id_number[2:])
+        except:
+            try:
+                tool_id = int(rostopic_name.split('_')[-1])
+            except:
+                raise('Cannot find integer tool_id in', rostopic_name)
+        return tool_id
+
+    def validate_tool_id(self):
+        status = PSMKinematicSolver.is_tool_definition_available(self.tool_id)
+        if not status:
+            print(f"ERROR: Tool ID '{self.tool_id}' is not available in the kinematic solver", file=sys.stderr)
+            raise RuntimeError
+
 
     def set_home_pose(self, pose):
         self.T_t_b_home = pose
@@ -143,31 +178,32 @@ class PSM:
         return self._T_w_b
 
     def _update_base_pose(self):
-        if not self._base_pose_updated:
             self._T_b_w = self.base.get_pose()
             self._T_w_b = self._T_b_w.Inverse()
-            self._base_pose_updated = True
 
     def run_grasp_logic(self, jaw_angle):
-        for i in range(len(self.actuators)):
-            if jaw_angle <= 0.2:
-                if self.sensor is not None:
-                    if self.sensor.is_triggered(i):
-                        sensed_obj = self.sensor.get_sensed_object(i)
-                        for s in self.graspable_objs_prefix:
-                            if s in sensed_obj:
-                                if not self.grasped[i]:
-                                    qualified_name = sensed_obj
-                                    self.actuators[i].actuate(qualified_name)
-                                    self.grasped[i] = True
-                                    print('Grasping Sensed Object Names', sensed_obj)
-            else:
-                if self.actuators[i] is not None:
-                    self.actuators[i].deactuate()
-                    if self.grasped[i] is True:
-                        print('Releasing Grasped Object')
-                    self.grasped[i] = False
-                    # print('Releasing Actuator ', i)
+        if len(self.actuators) == 0:
+            return
+        
+        if jaw_angle < self.grasp_actuation_jaw_angle:
+            if self.left_finger_ghost is not None:
+                if not self.grasped[0]:
+                    # if self.left_finger_ghost is not None and self.right_finger_ghost is not None:
+                    sensed_object_names = self.left_finger_ghost.get_all_sensed_obj_names()
+                    sensed_object_names = sensed_object_names + self.right_finger_ghost.get_all_sensed_obj_names()
+                    for gon in self.graspable_objs_prefix:
+                        matches = [son for son in sensed_object_names if gon in son]
+                        if matches:
+                            self.grasped_obj_name = matches[0]
+                            self.actuators[0].actuate(self.grasped_obj_name)
+                            self.grasped[0] = True
+
+        elif self.actuators[0] is not None:
+            self.actuators[0].deactuate()
+            self.grasped_obj_name = False
+            if self.grasped[0] is True:
+                print('Releasing Grasped Object')
+            self.grasped[0] = False
 
     def servo_cp(self, T_t_b):
         if type(T_t_b) in [np.matrix, np.array]:
@@ -212,18 +248,18 @@ class PSM:
         self._force_exit_thread = True
         trajectory_execute_thread.start()
     
-    def _execute_trajectory(self, trajectory_gen, execute_time, control_rate):
+    def _execute_trajectory(self, trajectory_gen, execute_time, rate):
         self._thread_lock.acquire()
         self._force_exit_thread = False
-        init_time = rospy.Time.now().to_sec()
-        control_rate = rospy.Rate(control_rate)
-        while not rospy.is_shutdown() and not self._force_exit_thread:
-            cur_time = rospy.Time.now().to_sec() - init_time
+        init_time = self.simulation_manager.get_time()
+        rate_ctrl = self.simulation_manager.create_rate(rate)
+        while not self.simulation_manager.is_shutdown() and not self._force_exit_thread:
+            cur_time = self.simulation_manager.get_time() - init_time
             if cur_time > execute_time:
                 break
             val = trajectory_gen.get_interpolated_x(np.array(cur_time, dtype=np.float32))
             self.servo_jp(val)
-            control_rate.sleep()
+            rate_ctrl.sleep()
         self._thread_lock.release()
 
     def servo_jv(self, jv):

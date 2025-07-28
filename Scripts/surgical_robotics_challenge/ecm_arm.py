@@ -46,7 +46,6 @@ from surgical_robotics_challenge.kinematics.ecmFK import *
 from surgical_robotics_challenge.utils.utilities import cartesian_interpolate_step
 from PyKDL import Frame, Rotation, Vector, Twist
 import time
-import rospy
 from threading import Thread
 
 
@@ -95,7 +94,7 @@ class ECM:
                     pos_goal_reached = True
                     rot_goal_reached = True
 
-                if rospy.is_shutdown():
+                if self.simulation_manager.is_shutdown():
                     self._force_exit_thread = True
                 time.sleep(0.01)
             self._thread_busy = False
@@ -142,7 +141,7 @@ class ECM:
             self._measured_cp = self.measured_cp()
         self._T_c_w_cmd = T_c_w
         self._force_exit_thread = True
-        while self._thread_busy: # Gets stuck here
+        while self._thread_busy:
             time.sleep(0.001)
         interpolate_thread = Thread(target=self._interpolate)
         interpolate_thread.start()
@@ -171,10 +170,11 @@ class ECM:
         j3 = jp[3]
         cmd = [j0, j1, j2, j3, 0.0]
         T_t_c = convert_mat_to_frame(compute_FK(cmd, 5)) # Tip if camera frame
-        self.servo_cp(self._T_c_w_init * T_t_c) # Further error here
+        self.servo_cp(self._T_c_w_init * T_t_c)
 
     def measured_cp(self):
         return self.get_T_c_w()
 
     def measured_jp(self):
         return self._measured_jp
+
