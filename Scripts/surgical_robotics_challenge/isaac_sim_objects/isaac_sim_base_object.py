@@ -1,15 +1,14 @@
-from transformations import quaternion_from_euler, euler_from_quaternion
-from watch_dog import WatchDog
-import rospy
+from tf_function.tf_function.transformations import quaternion_from_euler, euler_from_quaternion
+from .watch_dog import WatchDog
 from geometry_msgs.msg import Pose, Wrench
 
 class BaseObject(WatchDog):
-    def __init__(self, a_name, time_out):
+    def __init__(self, ral, a_name, time_out):
         """
         Constructor
         :param a_name:
         """
-        super(BaseObject, self).__init__(time_out)  # Set duration of Watchdog expiry
+        super(BaseObject, self).__init__(ral = ral, time_out = time_out)  # Set duration of Watchdog expiry
         self._name = a_name
         self._state = None
         self._cmd = None
@@ -254,7 +253,7 @@ class BaseObject(WatchDog):
         Internal function to synchronized with the publisher and update watchdog
         :return:
         """
-        self._cmd.header.stamp = rospy.Time.now()
+        self._cmd.header.stamp = self.ral.now().to_msg()
         #self._pub.publish(self._cmd)
         self.acknowledge_wd()
 

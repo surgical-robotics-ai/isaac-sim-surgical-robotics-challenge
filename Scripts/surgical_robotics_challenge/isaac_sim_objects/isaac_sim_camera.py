@@ -1,14 +1,14 @@
 from .isaac_sim_base_object import BaseObject
-from transformations import quaternion_from_euler, euler_from_quaternion
+from tf_function.tf_function.transformations import quaternion_from_euler, euler_from_quaternion
 
 # Isaac Sim based conversion of AMBF Camera for use in simulator / rostopic communication.
 class Camera(BaseObject):
-    def __init__(self, a_name, time_out=0.1):
+    def __init__(self, ral, a_name, time_out = 0.1):
         """
         Constructor
         :param a_name:
         """
-        super(Camera, self).__init__(a_name, time_out)  # Set duration of Watchdog expiry
+        super(Camera, self).__init__(ral = ral, a_name = a_name, time_out = time_out)  # Set duration of Watchdog expiry
         self.object_type = "CAMERA"
         self.body_type = "KINEMATIC"
 

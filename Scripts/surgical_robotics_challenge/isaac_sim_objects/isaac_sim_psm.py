@@ -1,17 +1,16 @@
 from .isaac_sim_base_object import BaseObject
-from transformations import quaternion_from_euler, euler_from_quaternion
-import rospy
+from tf_function.tf_function.transformations import quaternion_from_euler, euler_from_quaternion
 import math
 
 # Isaac Sim based conversion of AMBF Rigid Body for use in simulator / rostopic communication
 # Specifically made for Isaac Sim's version of a PSM object
 class PSM(BaseObject):
-    def __init__(self, a_name, time_out=0.1):
+    def __init__(self, ral, a_name, time_out = 0.1):
         """
         Constructor
         :param a_name:
         """
-        super(PSM, self).__init__(a_name, time_out)  # Set duration of Watchdog expiry
+        super(PSM, self).__init__(ral = ral, a_name = a_name, time_out = time_out)  # Set duration of Watchdog expiry
         self.object_type = "RIGID_BODY"
         self.body_type = "DYNAMIC"
         self._wrench_cmd_set = False  # Flag to check if a Wrench command has been set
@@ -26,7 +25,7 @@ class PSM(BaseObject):
         Internal function to synchronized with the publisher and update watchdog
         :return:
         """
-        self._cmd.header.stamp = rospy.Time.now()
+        self._cmd.header.stamp = self.ral.now().to_msg()
         #print(self._cmd)
         #self._pub.publish(self._cmd)
         self.acknowledge_wd()
