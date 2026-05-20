@@ -1,19 +1,19 @@
 # Isaac-Sim-Surgical-Robotics-Challenge
 Isaac Sim implementation of the AMBF Surgical Robotics Challenge developed by Johns Hopkins LCSR Lab.
-This implementation has been developed and tested on Ubuntu 20.04
+This implementation has been updated to Ubuntu 24.04
 
 See: https://github.com/surgical-robotics-ai/surgical_robotics_challenge
 To find the work that this project is based on. 
 
-## 1. Install AMBF, ROS1 Noetic, and Isaac Sim
-Ensure that the correct version of ROS is installed and sourced on your system. ROS1 Noetic can be found here: 
-http://wiki.ros.org/noetic/Installation/Ubuntu
+## 1. Install AMBF, ROS2 Jazzy, and Isaac Sim
+Ensure that the correct version of ROS 2 is installed and sourced on your system. ROS2 Jazzy can be found here: 
+https://docs.ros.org/en/jazzy/Installation.html
 
 AMBF and directions for installation can be found here: 
 https://github.com/WPI-AIM/ambf
 
 Isaac Sim can be downloaded here from NVIDIA's wesbsite: 
-https://developer.nvidia.com/isaac/sim
+https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html
 
 For additional resources, see Documents for summarized installation steps and notes for installations.
 
@@ -21,7 +21,7 @@ For additional resources, see Documents for summarized installation steps and no
 Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for use
 
 ## 3. Running Simulation
-1. After installation of all prerequisite programs, open Isaac Sim version 4.5.0
+1. After installation of all prerequisite programs, open Isaac Sim version 5.1.0
 2. Navigate to file and open either version of the Surgical_Challenge.usd (Surgical_Robotics_Challenge_New or Surgical_Robotics_Challenge_Old)
 You should see the following scene in the view monitor
 
