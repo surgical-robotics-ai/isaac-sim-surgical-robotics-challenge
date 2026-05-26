@@ -22,28 +22,30 @@ Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for
 
 ## 3. Running Simulation
 1. After installation of all prerequisite programs, open Isaac Sim version 5.1.0
-2. Navigate to file and open either version of the Surgical_Challenge.usd (Surgical_Robotics_Challenge_New or Surgical_Robotics_Challenge_Old)
-You should see the following scene in the view monitor
+2. Navigate to file and open either version of the Surgical_Challenge_Env.usd or ICRA_Challenge.usd
+You should see one of the following scenes in the view monitor
 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/viewport.png)
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/surgical.png)
 
-3. Start roscore in a seperate terminal
-4. Navigate to preferred ROS operated controller
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/surgical.png)
+
+3. Navigate to preferred ROS 2 operated controller
 
 ~~~
 cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-5. Play Isaac Sim Simulation
+4. Play Isaac Sim Simulation
+5. Source the running terminal with ROS 2 (source /opt/ros/jazzy/setup.bash)
 6. Run desired teleoperation control with the following command line
 
 ~~~
 python3 [controller].py -c isaac_sim --three false
 ~~~
 
-## 4. Choosing Thread Type
+## 4. Choosing Thread Type in Surgical Scene
 From Isaac Sim 4.0.0 and on, you are able to activate and deactivate different assets within the scene. To activate another thread in the scene, see below:
-1. Rigid Body Thread: Set Physic Scene step to 300, Activate "Needle_Thread" and deactivate others. Turn OFF GPU in physics scene.
+1. Rigid Body Thread: Set Physic Scene step to 60 - 300, Activate "Needle_Thread" and deactivate others. Turn OFF GPU in physics scene.
 2. Deformable Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Deformable" and deactivate others. Turn ON GPU in physics scene.
 3. Particle Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Particle" and deactivate others. Turn ON GPU in physics scene.
 
