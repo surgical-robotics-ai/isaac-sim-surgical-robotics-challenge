@@ -2,15 +2,15 @@
 The scripts listed and used in this project are based off the AMBF Surgical Challenge found [here](https://github.com/surgical-robotics-ai/surgical_robotics_challenge). Many of the existing utilities and teleoperation scripts are direct copies from the project and explanations can be found in the AMBF repository.
 
 ## Controlling Simulated Robots:
-Before launching Isaac Sim, ensure to activate the ROS1 bridge for your version. 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/startisaac.png)
+Before launching Isaac Sim, ensure to activate the ROS2 bridge for your version. 
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/52selector.png)
 
-Start roscore in another terminal or command-line before starting the simulation in the Surgical_Challenge.usd files. Roscore must be activated before starting the simulation and the Isaac Sim simulation must be running before running any teleoperation script. Using rostopics, Isaac Sim will read and send the PSM joint states in the dVRK-CRTK rostopic format.
+Isaac Sim simulation must be running before running any teleoperation script. Using rostopics, Isaac Sim will read and send the PSM joint states in the dVRK-CRTK rostopic format.
 
 ## Isaac Sim Omnigraph Custom Nodes
-Isaac Sim allows users to create custom interactive scripts with their Action Graph / Omnigraph. This feature is currently only present in version 2023.1, but nodes created this way does work for later versions.
+Isaac Sim allows users to create custom interactive scripts with their Action Graph / Omnigraph. This feature is currently only present in version 2023.1, but nodes created this way does work for later versions (Tested up to 4.2.0).
 
-To enable the custom Omnigraph nodes, download the Kit folder listed in scripts and add it to your Documents folder. In Isaac Sim, enable the custom extensions and autoload to use the custom nodes for the Surgica Challenge files.
+To enable the custom Omnigraph nodes, download the Kit folder listed in scripts of ROS 1 version if needed and add it to your Documents folder. In Isaac Sim, enable the custom extensions and autoload to use the custom nodes for the Surgica Challenge files. Currently, this feature is available for the ROS 2 branch, but was made with ROS 1.
 
 ![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/custom_nodes.png)
 
@@ -20,16 +20,17 @@ Several key files added or modified from the AMBF Surgical Challenge:
 #### 1. Additional Files
 | # | File Name                | Description   |
 |---|:------------------------:|:-------------:|
-| 1 | isaac_sim_base_object.py | Modeled after the AMBF base_object, this file creates an object with a rostopic to communicate between Isaac Sim, ROS1, and Teleoperation Scripts|
+| 1 | isaac_sim_base_object.py | Modeled after the AMBF base_object, this file creates an object with a rostopic to communicate between Isaac Sim, ROS2, and Teleoperation Scripts|
 | 2 | isaac_sim_camera.py      | Camera object that holds camera rostopic object| 
 | 3 | isaac_sim_psm.py         | PSM object that holds PSM rostopic object|
-| 4 | watch_dog.py             | Root base object to communicate between Isaac Sim and ROS1 |
-| 5 | isaac_client.py          | Primary file that acts between Isaac Sim and ROS1 to mediate the pipeline between the two applications. Must be called when defining which program any teleoperation script wishes to communicate with, modeled off of the ambf_client defined in the AMBF Surgical Challenge |
+| 4 | watch_dog.py             | Root base object to communicate between Isaac Sim and ROS2 |
+| 5 | isaac_client_ros2.py     | Primary file that acts between Isaac Sim and ROS2 to mediate the pipeline between the two applications. Must be called when defining which program any teleoperation script wishes to communicate with, modeled off of the ambf_client defined in the AMBF Surgical Challenge |
+| 6 | ros_abstraction_layer    |Contains AMBF implementation of ROS 2 and RAL files needed to utilize AMBF teleoperation files
 
 #### 2. Modified Files
 | # | File Name             | Description   |
 |---|:---------------------:|:-------------:|
-| 1 | simulation_manager.py | Modified to detect whether the isaac_sim client has been called, appropriately chooses between AMBF and Isaac Sim simulation manager |
+| 1 | simulation_manager.py | Modified to detect whether the isaac_sim ROS2 client has been called, appropriately chooses between AMBF and Isaac Sim simulation manager |
 | 2 | units_conversion.py   | Modified to match 1-for-1 scaling between a real PSM and simulated PSM |
 
 ## Teleoperation
