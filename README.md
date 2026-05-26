@@ -25,9 +25,9 @@ Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for
 2. Navigate to file and open either version of the Surgical_Challenge_Env.usd or ICRA_Challenge.usd
 You should see one of the following scenes in the view monitor
 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/surgical.png)
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/surgical.png)
 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/surgical.png)
+![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/pegboard.png)
 
 3. Navigate to preferred ROS 2 operated controller
 
