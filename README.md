@@ -1,16 +1,13 @@
-# Isaac-Sim-Surgical-Robotics-Challenge
+# Isaac-Sim-ICRA-Challenge-2026
 Isaac Sim implementation of the AMBF Surgical Robotics Challenge developed by Johns Hopkins LCSR Lab.
 This implementation has been developed and tested on Ubuntu 20.04
 
 See: https://github.com/surgical-robotics-ai/surgical_robotics_challenge
 To find the work that this project is based on. 
 
-## 1. Install AMBF, ROS1 Noetic, and Isaac Sim
+## 1. Install ROS1 Noetic, and Isaac Sim
 Ensure that the correct version of ROS is installed and sourced on your system. ROS1 Noetic can be found here: 
 http://wiki.ros.org/noetic/Installation/Ubuntu
-
-AMBF and directions for installation can be found here: 
-https://github.com/WPI-AIM/ambf
 
 Isaac Sim can be downloaded here from NVIDIA's wesbsite: 
 https://developer.nvidia.com/isaac/sim
@@ -27,18 +24,15 @@ You should see the following scene in the view monitor
 
 ![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/viewport.png)
 
-3. Start roscore in a seperate terminal
-4. Navigate to preferred ROS operated controller
-
 ~~~
 cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-5. Play Isaac Sim Simulation
-6. Run desired teleoperation control with the following command line
+3. Play Isaac Sim Simulation
+4. Run desired teleoperation control with the following command line
 
 ~~~
-python3 [controller].py -c isaac_sim --three false
+py [controller].py -c isaac_sim --three false
 ~~~
 
 ## 4. Choosing Thread Type
