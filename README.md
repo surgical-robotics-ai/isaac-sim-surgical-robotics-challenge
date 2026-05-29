@@ -1,4 +1,4 @@
-# Isaac-Sim-Surgical-Robotics-Challenge
+# Isaac-Sim-Surgical-Robotics-Challenge-ICRA-2026
 Isaac Sim implementation of the AMBF Surgical Robotics Challenge developed by Johns Hopkins LCSR Lab.
 This implementation has been updated to Ubuntu 24.04
 
