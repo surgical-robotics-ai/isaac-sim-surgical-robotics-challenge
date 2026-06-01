@@ -20,7 +20,7 @@ Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) f
 
 2. Open the file `ICRA_Challenge.usd`. You should see the following scene in the view monitor:
 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/pegboard.png)
+![Image](https://github.com/surgical-robotics-ai/isaac-sim-surgical-robotics-challenge/blob/ICRA-Challenge-2026/Media/pegboard.png)
 
 3. Navigate to preferred ROS 2 operated controller (Quest for ICRA 2026 challenge)
 
