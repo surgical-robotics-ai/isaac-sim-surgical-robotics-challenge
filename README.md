@@ -41,18 +41,10 @@ cd ~/isaac-sim
 cd isaac-sim-surgical-robotics-challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-7. Run Quest 3 teleoperation control using the following command line:
+7. Run the teleoperation control using the following command line:
 
 ~~~
-python3 quest3.py -c isaac_sim --three false
+python udp_crtk_bridge.py
 ~~~
 
-## Other input devices (not available at ICRA 2026):
-
-Repositories for other control devices can be found in the links below for MTM and Phantom Omni:
-
-**Master Tool Manipulator (MTM):**
-[https://github.com/jhu-dvrk/dvrk-ros](https://github.com/jhu-dvrk/dvrk-ros)
-
-**Phantom Omni:**
-[https://github.com/WPI-AIM/ros_geomagic](https://github.com/WPI-AIM/ros_geomagic)
+This control script converts CRTK-compatible JSON commands sent/received via UDP from the master device (e.g., Quest 3) to CRTK-compatible ROS2 topics for IsaacSim.
