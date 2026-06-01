@@ -1,35 +1,28 @@
-# Isaac-Sim-Surgical-Robotics-Challenge-ICRA-2026
-Isaac Sim implementation of the AMBF Surgical Robotics Challenge developed by Johns Hopkins LCSR Lab.
-This implementation has been updated to Ubuntu 24.04
+# IsaacSim Surgical Robotics Challenge for ICRA 2026
 
-See: https://github.com/surgical-robotics-ai/surgical_robotics_challenge
-To find the work that this project is based on. 
+This branch contains the Isaac Sim implementation of the [AMBF Surgical Robotics Challenge](https://github.com/surgical-robotics-ai/surgical_robotics_challenge) developed by the Johns Hopkins LCSR Lab.
 
-## 1. Install AMBF, ROS2 Jazzy, and Isaac Sim
-Ensure that the correct version of ROS 2 is installed and sourced on your system. ROS2 Jazzy can be found here: 
-https://docs.ros.org/en/jazzy/Installation.html
+This implementation has been updated to use ROS2 on Ubuntu 24.04, and provides the pegboard and pegs used for the [ICRA 2026 competition](https://surgical-robotics-ai.github.io/icra-competition-2026/index.html).
 
-AMBF and directions for installation can be found here: 
-https://github.com/WPI-AIM/ambf
+## 1. Install ROS2 Jazzy and Isaac Sim
 
-Isaac Sim can be downloaded here from NVIDIA's wesbsite: 
-https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html
+Ensure that the correct version of ROS 2 is installed and sourced on your system. ROS2 Jazzy can be found [here](https://docs.ros.org/en/jazzy/Installation.html).
 
-For additional resources, see Documents for summarized installation steps and notes for installations.
+Isaac Sim can be downloaded from [NVIDIA's website](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html).
 
-## 2. Clone Repository
-Refer to README in Assets and Scripts to access Isaac Sim Surgical Challenge for use
+## 2. Clone this repository
 
-## 3. Running Simulation
+Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) for further information.
+
+## 3. Run the Simulation
+
 1. After installation of all prerequisite programs, open Isaac Sim version 5.1.0
-2. Navigate to file and open either version of the Surgical_Challenge_Env.usd or ICRA_Challenge.usd
-You should see one of the following scenes in the view monitor
 
-![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/surgical.png)
+2. Open the file `ICRA_Challenge.usd`. You should see the following scene in the view monitor:
 
 ![Image](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/ros2/Media/pegboard.png)
 
-3. Navigate to preferred ROS 2 operated controller
+3. Navigate to preferred ROS 2 operated controller (Quest for ICRA 2026 challenge)
 
 ~~~
 cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/teleoperation
@@ -43,20 +36,12 @@ cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/tel
 python3 [controller].py -c isaac_sim --three false
 ~~~
 
-## 4. Choosing Thread Type in Surgical Scene
-From Isaac Sim 4.0.0 and on, you are able to activate and deactivate different assets within the scene. To activate another thread in the scene, see below:
-1. Rigid Body Thread: Set Physic Scene step to 60 - 300, Activate "Needle_Thread" and deactivate others. Turn OFF GPU in physics scene.
-2. Deformable Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Deformable" and deactivate others. Turn ON GPU in physics scene.
-3. Particle Body Thread: Set Physic Scene step to 60 (default), Activate "Needle_Particle" and deactivate others. Turn ON GPU in physics scene.
+## 4. Other input devices (not available at ICRA 2026):
 
-## 5. Input Devices
-Repositories for other control devices can be found in the links below for MTM and Phantom Omni
+Repositories for other control devices can be found in the links below for MTM and Phantom Omni:
 
 **Master Tool Manipulator (MTM)**
 a. https://github.com/jhu-dvrk/dvrk-ros
 
 **Phantom Omni**
 b. https://github.com/WPI-AIM/ros_geomagic
-
-## 6. Example
-![Video](https://github.com/tkim104/Isaac-Sim-Surgical-Robotics-Challenge/blob/main/Media/ISMR25_0023_VD_i.mp4)
