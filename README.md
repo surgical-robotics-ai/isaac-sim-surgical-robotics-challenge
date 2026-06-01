@@ -6,19 +6,19 @@ This implementation has been updated to use ROS2 on Ubuntu 24.04, and provides t
 
 ## Installation
 
-### 1. Install ROS2 Jazzy and Isaac Sim
+1. Install ROS2 Jazzy and Isaac Sim
 
 Ensure that the correct version of ROS 2 is installed and sourced on your system. ROS2 Jazzy can be found [here](https://docs.ros.org/en/jazzy/Installation.html).
 
 Isaac Sim can be downloaded from [NVIDIA's website](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html).
 
-### 2. Clone this repository
+2. Clone this repository
 
 Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) for further information.
 
 ## Running the simulation
 
-1. Open a terminal and source for ROS 2: `source /opt/ros/jazzy/setup.bash`
+1. Open a terminal and set up for ROS 2: `source /opt/ros/jazzy/setup.bash`
 
 2. Start Isaac Sim version 5.1.0
 
@@ -28,7 +28,7 @@ Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) f
 
 4. Press the `play' button (or press the spacebar) to play the Isaac Sim Simulation
 
-5. Open a new terminal and source for ROS 2: `source /opt/ros/jazzy/setup.bash`
+5. Open a new terminal and set up for ROS 2: `source /opt/ros/jazzy/setup.bash`
 
 6. Change to the teleoperation directory:
 
@@ -36,7 +36,7 @@ Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) f
 cd isaac-sim-surgical-robotics-challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-7. Run Quest 3 teleoperation control with the following command line:
+7. Run Quest 3 teleoperation control using the following command line:
 
 ~~~
 python3 quest3.py -c isaac_sim --three false
