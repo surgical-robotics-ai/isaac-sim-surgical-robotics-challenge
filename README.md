@@ -22,26 +22,26 @@ Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) f
 
 ![Image](https://github.com/surgical-robotics-ai/isaac-sim-surgical-robotics-challenge/blob/ICRA-Challenge-2026/Media/pegboard.png)
 
-3. Navigate to preferred ROS 2 operated controller (Quest for ICRA 2026 challenge)
+3. Navigate to preferred ROS 2 teleoperation controller (Quest for ICRA 2026 challenge)
 
 ~~~
 cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
 4. Play Isaac Sim Simulation
-5. Source the running terminal with ROS 2 (source /opt/ros/jazzy/setup.bash)
+5. Source the running terminal with ROS 2: `source /opt/ros/jazzy/setup.bash`
 6. Run desired teleoperation control with the following command line
 
 ~~~
 python3 [controller].py -c isaac_sim --three false
 ~~~
 
-## 4. Other input devices (not available at ICRA 2026):
+## Other input devices (not available at ICRA 2026):
 
 Repositories for other control devices can be found in the links below for MTM and Phantom Omni:
 
-**Master Tool Manipulator (MTM)**
-a. https://github.com/jhu-dvrk/dvrk-ros
+**Master Tool Manipulator (MTM):**
+[https://github.com/jhu-dvrk/dvrk-ros](https://github.com/jhu-dvrk/dvrk-ros)
 
-**Phantom Omni**
-b. https://github.com/WPI-AIM/ros_geomagic
+**Phantom Omni:**
+[https://github.com/WPI-AIM/ros_geomagic](https://github.com/WPI-AIM/ros_geomagic)
