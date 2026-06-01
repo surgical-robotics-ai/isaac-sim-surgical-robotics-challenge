@@ -4,36 +4,42 @@ This branch contains the Isaac Sim implementation of the [AMBF Surgical Robotics
 
 This implementation has been updated to use ROS2 on Ubuntu 24.04, and provides the pegboard and pegs used for the [ICRA 2026 competition](https://surgical-robotics-ai.github.io/icra-competition-2026/index.html).
 
-## 1. Install ROS2 Jazzy and Isaac Sim
+## Installation
+
+### 1. Install ROS2 Jazzy and Isaac Sim
 
 Ensure that the correct version of ROS 2 is installed and sourced on your system. ROS2 Jazzy can be found [here](https://docs.ros.org/en/jazzy/Installation.html).
 
 Isaac Sim can be downloaded from [NVIDIA's website](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/index.html).
 
-## 2. Clone this repository
+### 2. Clone this repository
 
 Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) for further information.
 
-## 3. Run the Simulation
+## Running the simulation
 
-1. After installation of all prerequisite programs, open Isaac Sim version 5.1.0
+1. Open a terminal and source for ROS 2: `source /opt/ros/jazzy/setup.bash`
 
-2. Open the file `ICRA_Challenge.usd`. You should see the following scene in the view monitor:
+2. Start Isaac Sim version 5.1.0
+
+3. Open the file `ICRA_Challenge.usd`. You should see the following scene in the view monitor:
 
 ![Image](https://github.com/surgical-robotics-ai/isaac-sim-surgical-robotics-challenge/blob/ICRA-Challenge-2026/Media/pegboard.png)
 
-3. Navigate to preferred ROS 2 teleoperation controller (Quest for ICRA 2026 challenge)
+4. Press the `play' button (or press the spacebar) to play the Isaac Sim Simulation
+
+5. Open a new terminal and source for ROS 2: `source /opt/ros/jazzy/setup.bash`
+
+6. Change to the teleoperation directory:
 
 ~~~
-cd Isaac-Sim-Surgical-Robotics-Challenge/scripts/surgical_robotics_challenge/teleoperation
+cd isaac-sim-surgical-robotics-challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-4. Play Isaac Sim Simulation
-5. Source the running terminal with ROS 2: `source /opt/ros/jazzy/setup.bash`
-6. Run desired teleoperation control with the following command line
+7. Run Quest 3 teleoperation control with the following command line:
 
 ~~~
-python3 [controller].py -c isaac_sim --three false
+python3 quest3.py -c isaac_sim --three false
 ~~~
 
 ## Other input devices (not available at ICRA 2026):
