@@ -20,7 +20,12 @@ Refer to README in [Assets](assets/README.md) and [Scripts](Scripts/README.md) f
 
 1. Open a terminal and set up for ROS 2: `source /opt/ros/jazzy/setup.bash`
 
-2. Start Isaac Sim version 5.1.0
+2. Change to the `isaac-sim` directory and start Isaac Sim version 5.1.0:
+
+```
+cd ~/isaac-sim
+./isaac-sim.sh
+```
 
 3. Open the file `ICRA_Challenge.usd`. You should see the following scene in the view monitor:
 
