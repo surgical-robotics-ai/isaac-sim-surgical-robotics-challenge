@@ -33,15 +33,19 @@ cd ~/isaac-sim
 
 4. Press the `play' button (or press the spacebar) to play the Isaac Sim Simulation
 
-5. Open a new terminal and set up for ROS 2: `source /opt/ros/jazzy/setup.bash`
+## Teleoperating the simulation
 
-6. Change to the teleoperation directory:
+After completing the steps above to run the simulation:
+
+1. Open a new terminal and set up for ROS 2: `source /opt/ros/jazzy/setup.bash`
+
+2. Change to the teleoperation directory:
 
 ~~~
 cd isaac-sim-surgical-robotics-challenge/scripts/surgical_robotics_challenge/teleoperation
 ~~~
 
-7. Run the teleoperation control using the following command line:
+3. Run the teleoperation control using the following command line:
 
 ~~~
 python udp_crtk_bridge.py
