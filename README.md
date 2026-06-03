@@ -48,7 +48,9 @@ cd isaac-sim-surgical-robotics-challenge/scripts/surgical_robotics_challenge/tel
 3. Run the teleoperation control using the following command line:
 
 ~~~
-python udp_crtk_bridge.py
+python udp_crtk_bridge.py --quest-ip <ip-address> --offset-rpy 180 0 180 --swap --home
 ~~~
+
+where `<ip-address>` is the IP address of the master device (e.g., Quest 3).
 
 This control script converts CRTK-compatible JSON commands sent/received via UDP from the master device (e.g., Quest 3) to CRTK-compatible ROS2 topics for IsaacSim.
